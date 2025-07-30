@@ -15,6 +15,13 @@
     --shadow-md: 0 5px 15px rgba(0,0,0,0.08);
 }
 
+/* Reseteo universal para un dimensionamiento más predecible */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 /* Estilos Generales */
 body {
     font-family: var(--font-family-base);
@@ -401,14 +408,12 @@ main {
 #add-from-catalog-form {
     display: flex;
     flex-direction: column;
-    height: 100%;
     overflow: hidden; /* To contain the sliding steps */
 }
 
 .wizard-step {
     display: none;
     flex-direction: column;
-    height: 100%;
 }
 
 .wizard-step.active-step {
@@ -1103,9 +1108,8 @@ input:focus, select:focus {
 
 /* Make the "Add Product" view use the full available height */
 .panel-view.active#add-product-view {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+    display: flex; /* Mantenemos flex para que el botón de envío se quede abajo */
+    flex-direction: column; 
 }
 
 /* =================================================================================== */
