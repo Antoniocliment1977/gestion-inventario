@@ -91,13 +91,14 @@
                     <input type="number" id="batch-quantity" required min="1">
                 </div>
                 <div class="date-container">
-                    <div class="form-group" style="flex-grow: 1;">
+                    <div class="form-group">
                         <label for="batch-expiration">Fecha de Caducidad:</label>
                         <input type="date" id="batch-expiration" required>
                     </div>
-                    <div class="form-group" style="flex-shrink: 0; justify-content: center;"><label for="batch-no-expiration" style="display: flex; align-items: center; gap: 5px; height: 100%; margin-top: 15px;"><input type="checkbox" id="batch-no-expiration"> No caduca</label></div>
+                    <div class="form-group checkbox-group">
+                        <label for="batch-no-expiration"><input type="checkbox" id="batch-no-expiration"> No caduca</label>
+                    </div>
                 </div>
-
                 <button type="submit" id="batch-submit-btn">Guardar Lote</button>
             </form>
         </div>
@@ -158,16 +159,18 @@
                                     <div class="form-group"><label for="catalog-stock">Stock Inicial:</label><input type="number" id="catalog-stock" required min="0"></div>
                                     <div class="form-group"><label for="catalog-min-stock">Stock Mínimo:</label><input type="number" id="catalog-min-stock" required min="0"></div>
                                     <div class="form-group"><label for="catalog-unit">Unidad:</label><select id="catalog-unit" required><option value="uds.">Unidades (uds.)</option><option value="kg">Kilos (kg)</option><option value="l">Litros (l)</option></select></div>
-                                    <div class="date-container" style="grid-column: 1 / -1;">
-                                        <div class="form-group" style="flex-grow: 1;">
+                                    <div class="date-container full-width-grid">
+                                        <div class="form-group">
                                             <label for="catalog-expiration">Fecha de Caducidad Inicial:</label><input type="date" id="catalog-expiration">
                                         </div>
-                                        <div class="form-group" style="flex-shrink: 0; justify-content: center;"><label for="catalog-no-expiration" style="display: flex; align-items: center; gap: 5px; height: 100%; margin-top: 15px;"><input type="checkbox" id="catalog-no-expiration"> No caduca</label></div>
+                                        <div class="form-group checkbox-group">
+                                            <label for="catalog-no-expiration"><input type="checkbox" id="catalog-no-expiration"> No caduca</label>
+                                        </div>
                                     </div>
                                 </div>
-                                <button type="submit" class="add-product-main-btn">Añadir Producto al Inventario</button>
                             </div>
                         </form>
+                        <button type="submit" form="add-from-catalog-form" class="add-product-main-btn wizard-submit-btn">Añadir Producto al Inventario</button>
                     </section>
                 </div>
 
