@@ -3,7 +3,7 @@ const CACHE_VERSION = 'v1.1';
 const CACHE_NAME = `inventario-respirall-cache-${CACHE_VERSION}`;
 
 const urlsToCache = [
-  './', // Usamos ./ para que funcione en GitHub Pages
+  '/', // Importante para la ruta raíz
   'index.html',
   'style.css',
   'script.js',
