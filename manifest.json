@@ -1,0 +1,21 @@
+{
+  "name": "Gestión de Inventario Respirall",
+  "short_name": "Inventario",
+  "description": "Controla el stock de tu negocio de forma fácil y visual.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f4f5f7",
+  "theme_color": "#4A90E2",
+  "icons": [
+    {
+      "src": "./icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}

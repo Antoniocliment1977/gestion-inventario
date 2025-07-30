@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Stock - Bar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="./icons/icon-192x192.png">
+    <link rel="manifest" href="./manifest.json">
+    <meta name="theme-color" content="#4A90E2">
+</head>
+<body>
+
+    <!-- Modal de Inicio de Sesión -->
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2>Identificación de Usuario</h2>
+            <p>Ingresa tu usuario y la contraseña para acceder.</p>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="username">Nombre de Usuario:</label>
+                    <input type="text" id="username" required autocomplete="username" autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña:</label>
+                    <input type="password" id="password" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="add-product-main-btn" style="margin-top: 20px;">Acceder</button>
+            </form>
+        </div>
+    </div>
+
+    <header>
+        <h1>Gestión de Inventario</h1>
+        <p>Controla el stock de tu negocio. <span id="user-display" style="display: none;"></span></p>
+    </header>
+
+    <main style="display: none;">
+        <section id="controls-section">
+            <div class="control-group">
+                <label>Filtrar por Categoría:</label>
+                <div id="category-filters"></div>
+            </div>
+            <div class="control-group">
+                <label for="sort-by">Ordenar por:</label>
+                <select id="sort-by">
+                    <option value="name">Nombre (A-Z)</option>
+                    <option value="stock_desc">Stock (Mayor a Menor)</option>
+                    <option value="stock_asc">Stock (Menor a Mayor)</option>
+                </select>
+            </div>
+            <button id="open-management-panel-btn" class="primary-action-btn" title="Abrir Panel de Gestión" style="display: none;">Añadir / Gestionar</button>
+        </section>
+
+        <section id="dashboard-container">
+            <!-- Los dashboards de productos se generarán aquí con JavaScript -->
+        </section>
+
+        <section id="product-list-section">
+            <h2>Listado Completo de Productos</h2>
+            <table id="product-table">
+                <thead>
+                    <tr>
+                        <th class="col-product">Producto / Lote</th>
+                        <th>Stock Lote</th>
+                        <th>Fecha Compra</th>
+                        <th>Fecha Caducidad</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="product-table-body">
+                    <!-- Las filas se generarán aquí con JavaScript -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <!-- Modal para Añadir/Editar Lotes -->
+    <div id="batch-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <span class="modal-close" id="close-batch-modal-btn">&times;</span>
+            <h2 id="batch-modal-title">Gestionar Lote</h2>
+            <form id="batch-form">
+                <input type="hidden" id="batch-product-id">
+                <input type="hidden" id="batch-id">
+                <div class="form-group">
+                    <label for="batch-quantity" id="batch-quantity-label">Cantidad:</label>
+                    <input type="number" id="batch-quantity" required min="1">
+                </div>
+                <div class="date-container">
+                    <div class="form-group" style="flex-grow: 1;">
+                        <label for="batch-expiration">Fecha de Caducidad:</label>
+                        <input type="date" id="batch-expiration" required>
+                    </div>
+                    <div class="form-group" style="flex-shrink: 0; justify-content: center;"><label for="batch-no-expiration" style="display: flex; align-items: center; gap: 5px; height: 100%; margin-top: 15px;"><input type="checkbox" id="batch-no-expiration"> No caduca</label></div>
+                </div>
+
+                <button type="submit" id="batch-submit-btn">Guardar Lote</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Panel de Gestión (Modal) -->
+    <div id="management-panel" class="modal-overlay" style="display: none;">
+        <div class="panel-container">
+            <span class="modal-close" id="close-panel-btn">&times;</span>
+            <aside class="panel-sidebar">
+                <div class="panel-header">
+                    <h2 class="panel-title">Gestión</h2>
+                </div>
+                <nav class="panel-nav">
+                    <button class="panel-nav-btn active" data-target="add-product-view">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2h6z"/></svg>
+                        <span>Añadir Producto</span>
+                    </button>
+                    <button class="panel-nav-btn" data-target="catalog-management-view">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></svg>
+                        <span>Gestionar Catálogo</span>
+                    </button>
+                    <button class="panel-nav-btn" data-target="data-management-view">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 19h18v2H3v-2zm10-5.828L19.071 7.1l1.414 1.414L12 17 3.515 8.515 4.929 7.1 11 13.17V2h2v11.172z"/></svg>
+                        <span>Copia de Seguridad</span>
+                    </button>
+                </nav>
+            </aside>
+            <main class="panel-content">
+                <div class="panel-views">
+                <!-- Vista para Añadir Producto -->
+                <div id="add-product-view" class="panel-view active">
+                    <section id="add-product-section">
+                        <h2>Añadir Producto desde Catálogo</h2>
+                        <form id="add-from-catalog-form">
+                            <!-- Step 1: Category Selection -->
+                            <div id="wizard-step-1" class="wizard-step active-step">
+                                <h3>Paso 1: Elige una Categoría</h3>
+                                <div id="catalog-category-grid" class="category-selection-grid"></div>
+                            </div>
+
+                            <!-- Step 2: Product Selection -->
+                            <div id="wizard-step-2" class="wizard-step">
+                                <button type="button" class="wizard-back-btn" data-target-step="1">← Volver a Categorías</button>
+                                <h3>Paso 2: Elige un Producto</h3>
+                                <div id="catalog-product-grid" class="catalog-grid"></div>
+                            </div>
+
+                            <!-- Step 3: Details & Confirmation -->
+                            <div id="wizard-step-3" class="wizard-step">
+                                <button type="button" class="wizard-back-btn" data-target-step="2">← Volver a Productos</button>
+                                <h3>Paso 3: Completa los Detalles</h3>
+                                <div class="selection-summary">
+                                    <p>Añadiendo: <strong id="summary-product-name"></strong></p>
+                                    <span>Categoría: <em id="summary-category-name"></em></span>
+                                </div>
+                                <div class="details-card">
+                                    <div class="form-group"><label for="catalog-stock">Stock Inicial:</label><input type="number" id="catalog-stock" required min="0"></div>
+                                    <div class="form-group"><label for="catalog-min-stock">Stock Mínimo:</label><input type="number" id="catalog-min-stock" required min="0"></div>
+                                    <div class="form-group"><label for="catalog-unit">Unidad:</label><select id="catalog-unit" required><option value="uds.">Unidades (uds.)</option><option value="kg">Kilos (kg)</option><option value="l">Litros (l)</option></select></div>
+                                    <div class="date-container" style="grid-column: 1 / -1;">
+                                        <div class="form-group" style="flex-grow: 1;">
+                                            <label for="catalog-expiration">Fecha de Caducidad Inicial:</label><input type="date" id="catalog-expiration">
+                                        </div>
+                                        <div class="form-group" style="flex-shrink: 0; justify-content: center;"><label for="catalog-no-expiration" style="display: flex; align-items: center; gap: 5px; height: 100%; margin-top: 15px;"><input type="checkbox" id="catalog-no-expiration"> No caduca</label></div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="add-product-main-btn">Añadir Producto al Inventario</button>
+                            </div>
+                        </form>
+                    </section>
+                </div>
+
+                <!-- Vista para Gestionar Categorías -->
+                <div id="catalog-management-view" class="panel-view">
+                    <section id="category-management-section">
+                        <h2>Gestionar Catálogo</h2>
+
+                        <div class="catalog-management-subsection">
+                            <h3>Categorías</h3>
+                            <form id="add-category-form">
+                                <div class="form-group">
+                                    <label for="new-category-name">Añadir nueva categoría:</label>
+                                    <input type="text" id="new-category-name" required placeholder="Ej: Postres">
+                                </div>
+                                <button type="submit">Añadir Categoría</button>
+                            </form>
+                            <div id="category-list-management" class="management-list">
+                                <!-- Lista de categorías se renderizará aquí -->
+                            </div>
+                        </div>
+
+                        <hr class="section-divider">
+
+                        <div class="catalog-management-subsection">
+                            <h3>Productos del Catálogo</h3>
+                            <form id="add-product-to-catalog-form">
+                                <div class="form-group"><label for="new-product-category">Categoría:</label><select id="new-product-category" required></select></div>
+                                <div class="form-group"><label for="new-product-name">Nombre del Nuevo Producto:</label><input type="text" id="new-product-name" required></div>
+                                <button type="submit">Añadir Producto</button>
+                            </form>
+                            <div id="catalog-product-list-management" class="management-list-grouped">
+                                <!-- Lista de productos del catálogo se renderizará aquí -->
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Vista para Copia de Seguridad -->
+                <div id="data-management-view" class="panel-view">
+                    <section id="data-management-section">
+                        <h2>Copia de Seguridad y Restauración</h2>
+                        <p>Guarda el estado actual de tu inventario o carga una copia de seguridad anterior.</p>
+                        <div class="data-buttons-container">
+                            <button id="export-data-btn" class="data-btn export">Exportar Datos (JSON)</button>
+                            <button id="import-data-btn" class="data-btn import">Importar Datos (JSON)</button>
+                        </div>
+                        <input type="file" id="import-file-input" accept=".json" style="display: none;">
+                        <hr class="section-divider">
+                        <button id="logout-btn" class="data-btn" style="background-color: var(--color-danger);">Cerrar Sesión</button>
+                    </section>
+                </div>
+            </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Contenedor para notificaciones Toast -->
+    <div id="toast-container"></div>
+
+    <script>
+        // Registra el Service Worker para que la app sea instalable y funcione offline
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => console.log('Service Worker registrado con éxito:', registration.scope))
+                    .catch(error => console.log('Error al registrar el Service Worker:', error));
+            });
+        }
+    </script>
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
