@@ -490,10 +490,6 @@ main {
     padding-top: 20px; /* Add some space inside the button */
 }
 
-.catalog-management-subsection {
-    margin-bottom: 40px;
-}
-
 .catalog-management-subsection h3 {
     font-size: 1.4rem;
     margin-bottom: 20px;
@@ -501,6 +497,10 @@ main {
     border-bottom: 1px solid var(--color-border);
     padding-bottom: 10px;
 }
+.catalog-management-subsection {
+    margin-bottom: 40px;
+}
+
 
 .section-divider {
     border: none;
@@ -534,10 +534,31 @@ main {
     font-weight: 500;
 }
 
+.details-card .full-width-grid {
+    grid-column: 1 / -1;
+}
+
 .date-container {
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     gap: 15px;
+}
+
+.date-container .form-group {
+    flex-grow: 1;
+}
+
+.date-container .checkbox-group {
+    flex-grow: 0;
+    flex-shrink: 0;
+    padding-bottom: 12px; /* Alinear con la altura del input */
+}
+.date-container .checkbox-group label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 500;
+    margin: 0;
 }
 
 .management-list-item .delete-btn {
@@ -1110,7 +1131,7 @@ input:focus, select:focus {
 .panel-view.active#add-product-view {
     display: flex; /* Mantenemos flex para que el botón de envío se quede abajo */
     flex-direction: column; 
-}
+} 
 
 /* =================================================================================== */
 /* --- ESTILOS RESPONSIVE PARA MÓVILES (TABLETS Y TELÉFONOS) --- */
@@ -1226,10 +1247,10 @@ input:focus, select:focus {
     /* --- Panel de Gestión --- */
     .panel-container {
         flex-direction: column;
-        height: 100vh;
-        max-height: 100vh;
+        height: 100%; /* Ocupa todo el overlay, que es 100vh */
         width: 100vw;
         border-radius: 0;
+        max-height: none;
     }
     .panel-sidebar {
         width: 100%;
@@ -1249,7 +1270,27 @@ input:focus, select:focus {
         gap: 5px;
     }
     .panel-content {
+        padding: 0; /* El padding se aplicará a las vistas internas */
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden; /* El contenido de las vistas hará scroll */
+    }
+
+    .panel-view {
         padding: 20px 15px;
+        overflow-y: auto;
+        flex-grow: 1;
+    }
+
+    .panel-view.active#add-product-view {
+        padding: 0; /* El formulario interno tendrá el padding */
+    }
+
+    #add-from-catalog-form {
+        padding: 20px 15px;
+        overflow-y: auto;
+        flex-grow: 1;
     }
 
     .panel-view h2 {
@@ -1265,6 +1306,26 @@ input:focus, select:focus {
     .details-card, 
     #add-product-to-catalog-form {
         grid-template-columns: 1fr; /* Apila los campos en una sola columna */
+    }
+
+    .wizard-submit-btn {
+        flex-shrink: 0; /* Evita que el botón se encoja */
+        margin: 0;
+        border-radius: 0;
+        width: 100%;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    }
+
+    .date-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .date-container .checkbox-group {
+        padding: 10px;
+        background-color: var(--color-background);
+        border-radius: var(--border-radius);
     }
 
     #add-category-form {
